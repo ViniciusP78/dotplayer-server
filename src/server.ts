@@ -64,6 +64,14 @@ app.post('/playlists', ( request, response ) => { // Cria uma playlist
 
   let data = request.body;
 
+  if (data.name == undefined) { // O nome da playlist não pode ser nulo
+    return response.sendStatus(400);
+  }
+
+  if (data.tracks == undefined) { // Permite a criação de uma Playlist vazia
+    data.tracks = [];
+  }
+
   const playlist = {
     name: data.name,
     tracks: data.tracks
@@ -71,7 +79,7 @@ app.post('/playlists', ( request, response ) => { // Cria uma playlist
 
   fs.writeFileSync(path.resolve(__dirname, '..', 'playlists', `${playlist.name}.json`), JSON.stringify(playlist.tracks, null, 2));
 
-  return response.json(request.body)
+  return response.json(playlist)
 });
 
 // app.get('/playlists', ( request, response ) => { // Lista todas as playlists e seu conteúdo
