@@ -1,6 +1,7 @@
 import express, { response } from 'express';
 import cors from 'cors';
 import path from 'path';
+import uniqid from 'uniqid';
 
 import routes from './routes';
 
@@ -12,6 +13,7 @@ export const tracksDir = path.resolve(__dirname, '..', 'tracks');
 export const playlistsDir = path.resolve(__dirname, '..', 'playlists');
 
 export interface IPlaylist {
+  id?: string,
   name: string,
   tracks: string[]
 };
@@ -19,6 +21,5 @@ export interface IPlaylist {
 app.use(cors()); // Importante
 
 app.use(routes);
-
 
 app.listen(3333);
