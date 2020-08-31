@@ -72,14 +72,33 @@ app.post('/playlists', ( request, response ) => { // Cria uma playlist
     data.tracks = [];
   }
 
-  const playlist = {
+  let playlist = {
     name: data.name,
     tracks: data.tracks
   }
 
   fs.writeFileSync(path.resolve(__dirname, '..', 'playlists', `${playlist.name}.json`), JSON.stringify(playlist.tracks, null, 2));
 
-  return response.json(playlist)
+  return response.json(playlist);
+});
+
+app.delete('/playlist/:name', ( request, response ) => {
+  let { name } = request.params;
+
+  let exists = false;
+
+  fs.readdirSync(path.resolve(__dirname, '..', 'playlists')).map((item) => {
+    if (item == `${name}.json`){
+      exists = true;
+    }
+  });
+
+  if (exists) {
+    fs.unlinkSync(path.resolve(__dirname, '..', 'playlists', `${name}.json`));
+    return response.sendStatus(200);
+  }
+
+  return response.sendStatus(404);
 });
 
 // app.get('/playlists', ( request, response ) => { // Lista todas as playlists e seu conteúdo
