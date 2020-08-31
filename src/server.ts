@@ -87,8 +87,8 @@ app.delete('/playlist/:name', ( request, response ) => {
 
   let exists = false;
 
-  fs.readdirSync(path.resolve(__dirname, '..', 'playlists')).map((item) => {
-    if (item == `${name}.json`){
+  fs.readdirSync(path.resolve(__dirname, '..', 'playlists')).map((file) => {
+    if (file == `${name}.json`){
       exists = true;
     }
   });
@@ -101,51 +101,24 @@ app.delete('/playlist/:name', ( request, response ) => {
   return response.sendStatus(404);
 });
 
-// app.get('/playlists', ( request, response ) => { // Lista todas as playlists e seu conteúdo
-//   fs.readdir(path.resolve(__dirname, '..', 'playlists'), function (err, data) {
-//     if (err) {
-//       console.log(err);
-//       return response.sendStatus(500);
-//     }
-//     let playlists: IPlaylists[] = [];
+app.get('/playlist/:name', ( request, response ) => {
+  let { name } = request.params;
 
-//     data.map((value) => {
-//       fs.readFile(path.resolve(__dirname, '..', 'playlists', value), 'utf8' , (err, data) => {
-//         if (err) {
-//           console.log(err);
-//           return response.sendStatus(500);
-//         };
-//         playlists.push({
-//           name: value,
-//           tracks: data
-//         });
-//       });
+  let tracks: string;
 
-//       return playlists;
+  try {
+    tracks = fs.readFileSync(path.resolve(__dirname, '..', 'playlists', `${name}.json`), 'utf-8');
+  } catch (error) {
+    console.log(error);
+    return response.sendStatus(404);
+  };
 
-//     })
-//   });
-// });
+  let playlist: IPlaylist = {
+    name,
+    tracks: JSON.parse(tracks)
+  };
 
-
-// fs.readFile(path.resolve(__dirname, '..', 'playlists', 'file.m3u'), 'utf8', function (err,data) {
-//   if (err) {
-//     return console.log(err);
-//   }
-//   console.log(data);
-// });
-
-// fs.writeFile('helloworld.txt', 'Hello World!', function (err) {
-//   if (err) return console.log(err);
-//   console.log('Hello World > helloworld.txt');
-// });
-
-// fs.readdir(path.resolve(__dirname, '..', 'music'), function (err, data) {
-//   if (err) {
-//     return console.log(err);
-//   }
-//   console.log(data);
-// })
-
+  response.json(playlist);
+})
 
 app.listen(3333);
