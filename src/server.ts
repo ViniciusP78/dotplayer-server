@@ -1,4 +1,5 @@
 import express, { response } from 'express';
+import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 
@@ -45,6 +46,10 @@ app.get('/playlists', ( request, response ) => { // Lista todas as playlists e s
         tracks = fs.readFileSync(path.resolve(__dirname, '..', 'playlists', value), 'utf-8');
       } catch (error) {
         return response.sendStatus(500);
+      }
+      
+      if(tracks == "") { // Caso não haja playlists criadas
+        return;
       }
 
       tracks = JSON.parse(tracks);
@@ -120,5 +125,7 @@ app.get('/playlist/:name', ( request, response ) => {
 
   response.json(playlist);
 })
+
+app.use(cors()); // Importante
 
 app.listen(3333);
