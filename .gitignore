@@ -103,9 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
-# Musics and Playlists folder
-music/*
-!music/tracks_here
+# Tracks and Playlists folder
+tracks/*
+!tracks/tracks_here
 
 playlists/*
 !playlists/playlists_here
