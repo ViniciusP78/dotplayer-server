@@ -2,6 +2,7 @@ import express, { response } from 'express';
 import cors from 'cors';
 import path from 'path';
 import uniqid from 'uniqid';
+import "reflect-metadata";
 
 import routes from './routes';
 
